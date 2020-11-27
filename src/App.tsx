@@ -1,24 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import LoginForm from "./components/LoginForm";
+import { loginUser } from "./api";
+import "./App.css";
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+
+  const Login = (userName: string, password: string) => {
+    console.log("userName==", userName, "password==>", password);
+    const response = loginUser(userName, password);
+    if (response) {
+      setIsLoggedIn(true);
+      setShowAlert(false);
+    } else {
+      setShowAlert(true);
+    }
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {isLoggedIn ? <div>Login SuccessFul</div> : <LoginForm onClick={Login} />}
+      {showAlert && <p>Invalid userName or password</p>}
     </div>
   );
 }
